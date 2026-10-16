@@ -106,12 +106,17 @@ prima(X, Y) :-
     X \= Y.
 
 /* --------------------------------------------------------------------------
-   4. EJEMPLOS DE CONSULTAS TÍPICAS (Ejecutar en la consola '?-' de SWISH/SWI):
+   4. EJEMPLOS DE CONSULTAS TÍPICAS
+   (Nota: En la consola interactiva de SWISH NO escribas "?-", ya viene
+   en el prompt. Escribe directamente el predicado terminado en punto):
    --------------------------------------------------------------------------
+   abuelo(victor, Quien).
+   abuelo(juan, Quien).
+   hermano(carlos, Hermano).
+   tia(rosario, Sobrino).
+   es_padre(carlos).
+   progenitor(P, elena).
+
+   (En terminal de línea de comandos SWI-Prolog tradicional):
    ?- abuelo(victor, Quien).
-   ?- abuelo(juan, Quien).
-   ?- hermano(carlos, Hermano).
-   ?- tia(rosario, Sobrino).
-   ?- es_padre(carlos).
-   ?- progenitor(P, elena).
    ========================================================================== */
