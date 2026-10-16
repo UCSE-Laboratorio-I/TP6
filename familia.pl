@@ -5,8 +5,12 @@
    Basado en: Diapositivas Clase 7 ("Lógica aplicada en PROLOG")
    ========================================================================== */
 
+% Directivas para permitir cláusulas no contiguas en SWI-Prolog / SWISH
+:- discontiguous padre/2.
+:- discontiguous madre/2.
+
 /* --------------------------------------------------------------------------
-   1. DECLARACIÓN DE GÉNEROS (Predicados Monádicos)
+   1. DECLARACIÓN DE GÉNEROS (Predicados Monádicos: hombre/1, mujer/1)
    -------------------------------------------------------------------------- */
 hombre(victor).
 hombre(juan).
@@ -21,28 +25,24 @@ mujer(belen).
 mujer(elena).
 
 /* --------------------------------------------------------------------------
-   2. RELACIONES DIRECTAS DE PARENTESCO (Predicados Poliádicos: Hechos)
+   2. HECHOS DE PATERNIDAD Y MATERNIDAD (padre/2, madre/2 agrupados)
    padre(Padre, Hijo/a).
    madre(Madre, Hijo/a).
    -------------------------------------------------------------------------- */
 
-% Generación 1 -> Generación 2 (Rama Víctor y Consuelo)
+% Todos los hechos de padre/2 juntos (evita advertencia de cláusulas dispersas)
 padre(victor, belen).
-madre(consuelo, belen).
-
-% Generación 1 -> Generación 2 (Rama Juan y María)
 padre(juan, soltero).
 padre(juan, rosario).
 padre(juan, carlos).
-
-madre(maria, soltero).
-madre(maria, rosario).
-madre(maria, carlos).
-
-% Generación 2 -> Generación 3 (Rama Carlos y Belén)
 padre(carlos, carlitos).
 padre(carlos, elena).
 
+% Todos los hechos de madre/2 juntos
+madre(consuelo, belen).
+madre(maria, soltero).
+madre(maria, rosario).
+madre(maria, carlos).
 madre(belen, carlitos).
 madre(belen, elena).
 
@@ -68,7 +68,7 @@ abuela(X, Y) :-
 es_padre(X) :- padre(X, _).
 es_madre(X) :- madre(X, _).
 
-% Hermano / Hermana: comparten el mismo progenitor y no son la misma persona.
+% Hermano / Hermana: comparten progenitor y no son la misma persona (X \= Y).
 hermano(X, Y) :-
     hombre(X),
     progenitor(P, X),
@@ -90,12 +90,12 @@ tia(X, Y) :-
     hermana(X, P),
     progenitor(P, Y).
 
-% Primo / Prima: X es hijo/a del tío/tía de Y.
+% Primo / Prima: X es hijo/a del hermano/a del progenitor de Y.
 primo(X, Y) :-
     hombre(X),
     progenitor(P1, X),
     progenitor(P2, Y),
-    hermano(P1, P2),
+    (hermano(P1, P2) ; hermana(P1, P2)),
     X \= Y.
 
 prima(X, Y) :-

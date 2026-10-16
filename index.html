@@ -131,17 +131,31 @@
             <span>📋</span> Copiar Código Prolog
           </button>
         </div>
-        <pre class="p-3 bg-slate-900 rounded-lg text-xs font-mono text-sky-300 max-h-48 overflow-y-auto"><code id="prolog-base-code">% Hechos del arbol familiar
+        <pre class="p-3 bg-slate-900 rounded-lg text-xs font-mono text-sky-300 max-h-48 overflow-y-auto"><code id="prolog-base-code">% Directivas opcionales para evitar advertencias de clausulas dispersas
+:- discontiguous padre/2.
+:- discontiguous madre/2.
+
+% 1. Hechos de genero
 hombre(victor). hombre(juan). hombre(soltero). hombre(carlos). hombre(carlitos).
 mujer(consuelo). mujer(maria). mujer(rosario). mujer(belen). mujer(elena).
 
-padre(victor, belen). madre(consuelo, belen).
-padre(juan, soltero). padre(juan, rosario). padre(juan, carlos).
-madre(maria, soltero). madre(maria, rosario). madre(maria, carlos).
-padre(carlos, carlitos). padre(carlos, elena).
-madre(belen, carlitos). madre(belen, elena).
+% 2. Hechos de paternidad (agrupados juntos)
+padre(victor, belen).
+padre(juan, soltero).
+padre(juan, rosario).
+padre(juan, carlos).
+padre(carlos, carlitos).
+padre(carlos, elena).
 
-% Reglas deductivas
+% 3. Hechos de maternidad (agrupados juntos)
+madre(consuelo, belen).
+madre(maria, soltero).
+madre(maria, rosario).
+madre(maria, carlos).
+madre(belen, carlitos).
+madre(belen, elena).
+
+% 4. Reglas deductivas de parentesco
 progenitor(X, Y) :- padre(X, Y).
 progenitor(X, Y) :- madre(X, Y).
 
