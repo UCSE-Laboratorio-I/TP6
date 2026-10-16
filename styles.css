@@ -1,0 +1,72 @@
+/* styles.css - TP6 Programación Lógica Aplicada en Prolog */
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a; 
+}
+::-webkit-scrollbar-thumb {
+  background: #334155; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569; 
+}
+
+/* Ambient Glow Effects */
+.glow-bg {
+  position: relative;
+}
+.glow-bg::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  right: -50px;
+  bottom: -50px;
+  background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.06), transparent 40%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Radio Card Selection - Modern CSS :has selector */
+.radio-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.radio-card:has(input:checked) {
+  border-color: #0ea5e9 !important;
+  background-color: rgba(14, 165, 233, 0.12) !important;
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+}
+
+/* Interactive Tabs for Compilers */
+.tab-btn {
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+.tab-btn.active {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+}
+
+/* Code Snippet Styles */
+.prolog-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Print optimizations */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .sticky-toolbar, #theme-toggle-btn, #btn-export-json, #btn-preview-json, #btn-export-json-footer, #compiler-sandbox {
+    display: none !important;
+  }
+}

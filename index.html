@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP N° 6: Programación Lógica Aplicada en Prolog - Laboratorio I</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 min-h-screen transition-colors glow-bg">
+
+  <!-- Sticky Toolbar -->
+  <div class="sticky-toolbar sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex-1 w-full max-w-xs hidden sm:block">
+        <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1" id="progress-text">0 de 40 completados (0%)</div>
+        <div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-sky-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-open-biblio-all" class="text-sm px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition">📖 Guía Bibliográfica</button>
+        <button id="btn-git-guide" class="text-sm px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition">🐙 Git / Entrega</button>
+        <button id="theme-toggle-btn" class="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition" title="Alternar Modo Oscuro/Claro">🌓</button>
+        <button id="btn-export-json" class="text-sm px-4 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-md transition font-medium">💾 Exportar JSON</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <!-- Encabezado Principal -->
+    <header class="text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">
+        <span>Laboratorio I</span> • <span>Inteligencia Artificial y Agentes Racionales</span> • <span>UCSE DASS 2026</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-cyan-500 dark:from-sky-400 dark:via-indigo-400 dark:to-cyan-300">
+        TP N° 6: Programación Lógica Aplicada en Prolog
+      </h1>
+      <p class="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+        Declaración de hechos y predicados, consultas interactivas con variables, conjunciones con backtracking, reglas con cláusulas de Horn y resolución formal del árbol genealógico familiar en SWISH y OneCompiler.
+      </p>
+    </header>
+
+    <!-- Datos del Estudiante -->
+    <section class="p-6 rounded-2xl bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 shadow-sm backdrop-blur-sm">
+      <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-200 flex items-center gap-2">
+        <span>👨‍🎓</span> Datos del Estudiante
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre Completo</label>
+          <input type="text" data-student="nombre" placeholder="Ej. Juan Pérez" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Legajo / Matrícula</label>
+          <input type="text" data-student="legajo" placeholder="Ej. 12345" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         PANEL INTERACTIVO: Entornos de Ejecución (SWISH vs OneCompiler) y Código Base
+    ========================================================================== -->
+    <section id="compiler-sandbox" class="p-6 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-1">
+            <span>💻 Laboratorio en Línea</span>
+          </div>
+          <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+            Árbol Genealógico y Entornos de Ejecución Prolog
+          </h2>
+          <p class="text-xs text-slate-400">
+            Copia el código base de <span class="font-mono text-sky-400">familia.pl</span> y pruébalo interactivamente en tu compilador preferido.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+          <button id="tab-swish" class="tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">
+            🌐 SWISH (Oficial / REPL)
+          </button>
+          <button id="tab-onecompiler" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">
+            ⚡ OneCompiler (Batch)
+          </button>
+        </div>
+      </div>
+
+      <!-- Diagrama Visual del Árbol Genealógico de la Clase -->
+      <div class="p-4 bg-slate-950/80 rounded-xl border border-slate-800">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-sky-400 mb-2 flex items-center gap-1.5">
+          <span>🌳</span> Diagrama de la Familia (Clase 7 - Diapositiva 22)
+        </h3>
+        <div class="text-center font-mono text-xs md:text-sm text-slate-300 overflow-x-auto py-2 leading-relaxed">
+          <div class="text-amber-400 font-bold mb-1">victor &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; consuelo</div>
+          <div class="text-slate-500">└──┬────────────────────┘</div>
+          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;│ (padres de)</div>
+          <div class="text-slate-300">juan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; maria &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="text-slate-500">└──┬───────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;├── soltero &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;├── rosario &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;└── carlos ═════════════════════════ belen&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──┬────────────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── carlitos (hijo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── elena &nbsp;&nbsp;&nbsp;(hija)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        </div>
+      </div>
+
+      <!-- Visor de Código Base familia.pl con Copiado Rápido -->
+      <div class="p-4 bg-slate-950/80 rounded-xl border border-slate-800 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-mono text-slate-400">familia.pl (Hechos y Reglas de Cátedra)</span>
+          <button id="btn-copy-prolog" class="text-xs px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium transition shadow flex items-center gap-1.5">
+            <span>📋</span> Copiar Código Prolog
+          </button>
+        </div>
+        <pre class="p-3 bg-slate-900 rounded-lg text-xs font-mono text-sky-300 max-h-48 overflow-y-auto"><code id="prolog-base-code">% Hechos del arbol familiar
+hombre(victor). hombre(juan). hombre(soltero). hombre(carlos). hombre(carlitos).
+mujer(consuelo). mujer(maria). mujer(rosario). mujer(belen). mujer(elena).
+
+padre(victor, belen). madre(consuelo, belen).
+padre(juan, soltero). padre(juan, rosario). padre(juan, carlos).
+madre(maria, soltero). madre(maria, rosario). madre(maria, carlos).
+padre(carlos, carlitos). padre(carlos, elena).
+madre(belen, carlitos). madre(belen, elena).
+
+% Reglas deductivas
+progenitor(X, Y) :- padre(X, Y).
+progenitor(X, Y) :- madre(X, Y).
+
+abuelo(X, Y) :- padre(X, Z), progenitor(Z, Y).
+abuela(X, Y) :- madre(X, Z), progenitor(Z, Y).
+
+es_padre(X) :- padre(X, _).
+es_madre(X) :- madre(X, _).
+
+hermano(X, Y) :- hombre(X), progenitor(P, X), progenitor(P, Y), X \= Y.
+hermana(X, Y) :- mujer(X), progenitor(P, X), progenitor(P, Y), X \= Y.
+
+tio(X, Y) :- hermano(X, P), progenitor(P, Y).
+tia(X, Y) :- hermana(X, P), progenitor(P, Y).</code></pre>
+      </div>
+
+      <!-- Iframe / Sandboxes -->
+      <div id="frame-swish" class="space-y-3">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Entorno interactivo oficial SWISH: Pega el código a la izquierda y consulta con <code>?- abuelo(victor, X).</code> a la derecha.</span>
+          <a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="text-sky-400 underline hover:text-sky-300 font-medium flex items-center gap-1">
+            Abrir SWISH en pestaña nueva ↗
+          </a>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-slate-700 bg-white">
+          <iframe src="https://swish.swi-prolog.org/" class="w-full h-[480px] border-0" title="SWISH Prolog Sandbox"></iframe>
+        </div>
+      </div>
+
+      <div id="frame-onecompiler" class="hidden space-y-3">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Compilador rápido OneCompiler: Requiere <code>:- initialization(main).</code> y llamar a <code>write/nl</code> en <code>main</code>.</span>
+          <a href="https://onecompiler.com/prolog" target="_blank" rel="noopener noreferrer" class="text-sky-400 underline hover:text-sky-300 font-medium flex items-center gap-1">
+            Abrir OneCompiler en pestaña nueva ↗
+          </a>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-slate-700 bg-slate-950">
+          <iframe src="https://onecompiler.com/embed/prolog?theme=dark" class="w-full h-[480px] border-0" title="OneCompiler Prolog Sandbox"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         LISTADO DE LOS 10 EJERCICIOS AUTOEVALUABLES
+    ========================================================================== -->
+    <div class="space-y-10">
+
+      <!-- Ejercicio 1: Sintaxis y Elementos Gramaticales de Prolog -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 1: Sintaxis y Elementos Gramaticales de Prolog</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          La convención de Edimburgo establece distinciones estrictas según el uso de mayúsculas, minúsculas y signos de puntuación. Identifica las reglas sintácticas canónicas:
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Nombres de constantes, objetos y predicados:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo deben iniciar obligatoriamente átomos como <code>juan</code> o <code>le_gusta_a</code>?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_sintaxis_prolog" data-key="regla_minusculas_atomos" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Selecciona la regla --</option>
+                <option value="mayuscula_obligatoria">Comenzar siempre con Mayúscula sostenida</option>
+                <option value="constantes_y_predicados_en_minuscula">Comenzar obligatoriamente con letra minúscula</option>
+                <option value="entre_comillas_dobles">Encerrados siempre entre comillas dobles</option>
+                <option value="con_guion_bajo">Iniciar siempre con guión bajo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Identificación de Variables Lógicas:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo reconoce el intérprete una variable como <code>X</code> o <code>Persona</code>?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_sintaxis_prolog" data-key="regla_mayusculas_variables" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Reconocimiento de variables --</option>
+                <option value="por_palabra_clave_var">Por la palabra clave previa "var"</option>
+                <option value="variables_en_mayuscula_o_guion_bajo">Comenzar con letra Mayúscula o con el guión bajo '_'</option>
+                <option value="terminar_en_signo_pregunta">Terminar obligatoriamente con un signo de interrogación</option>
+                <option value="por_posicion_en_parentesis">Por ubicarse en la primera posición del predicado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Concepto de Aridad (ej. <code>padre/2</code> vs <code>padre/1</code>):</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué indica la notación con barra en un predicado?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_sintaxis_prolog" data-key="concepto_aridad" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Definición de Aridad --</option>
+                <option value="numero_de_linea">El número de línea donde fue programado en el archivo</option>
+                <option value="numero_de_argumentos_del_predicado">El número exacto de argumentos que recibe el predicado</option>
+                <option value="prioridad_de_evaluacion">El nivel de prioridad aritmética del operador</option>
+                <option value="versiones_del_archivo">La cantidad de versiones compiladas del predicado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Terminador de Cláusula:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué carácter debe cerrar obligatoriamente cada hecho y regla?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_sintaxis_prolog" data-key="rol_punto_final" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Terminador obligatorio --</option>
+                <option value="punto_y_coma">Un punto y coma ';'</option>
+                <option value="terminador_obligatorio_de_clausula">Un punto final '.' indispensable para que el parser termine la cláusula</option>
+                <option value="salto_de_linea_simple">Un salto de línea simple sin puntuación</option>
+                <option value="dos_puntos">Dos puntos ':'</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 6-10 ("Elementos de Prolog", "Hechos", "Sintaxis de Edimburgo") y Slide 14 ("Variables").</p>
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 9.5 pp. 291-294):</strong> Sintaxis y convenciones léxicas de Prolog.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 2: Declaración de Hechos y Tipos de Predicados -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 2: Declaración de Hechos y Tipos de Predicados</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Un hecho declara una verdad directa del dominio. Identifica los tipos de predicados y la importancia del orden de los argumentos:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Predicado Monádico (Aridad 1):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Ejemplo: <code>valioso(diamante).</code> o <code>mujer(ana).</code></p>
+            <select data-ex="ej2_declaracion_hechos" data-key="predicado_monadico" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Tipo de afirmación --</option>
+              <option value="relacion_entre_dos_individuos">Describe una relación simétrica entre dos objetos</option>
+              <option value="propiedad_de_un_solo_objeto">Describe una propiedad intrínseca de un único objeto</option>
+              <option value="operacion_aritmetica">Calcula un valor algebraico numérico</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Predicado Poliádico (Aridad &ge; 2):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Ejemplo: <code>tiene(juan, libro).</code> o <code>da(juan, libro, maria).</code></p>
+            <select data-ex="ej2_declaracion_hechos" data-key="predicado_poliadico" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Tipo de afirmación --</option>
+              <option value="propiedad_unaria">Declara el tipo de datos de una variable</option>
+              <option value="relacion_entre_multiples_objetos">Describe una relación n-aria entre múltiples objetos ordenados</option>
+              <option value="procedimiento_recursivo">Un bucle que se repite n veces</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Orden de los Argumentos:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué determina el orden en <code>padre(victor, belen).</code>?</p>
+            <select data-ex="ej2_declaracion_hechos" data-key="orden_argumentos_semantica" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Importancia del orden --</option>
+              <option value="es_indiferente_en_prolog">Es indiferente; Prolog reorganiza los argumentos alfabéticamente</option>
+              <option value="define_quien_cumple_cada_rol">Define quién cumple cada rol semántico (sujeto vs objeto de la relación)</option>
+              <option value="afecta_solo_la_memoria">Solo altera el consumo de memoria en la pila</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Naturaleza de un Hecho en la KB:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué representa formalmente un hecho introducido en Prolog?</p>
+            <select data-ex="ej2_declaracion_hechos" data-key="hecho_verdadero_kb" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Naturaleza del hecho --</option>
+              <option value="hipotesis_probabilistica">Una hipótesis sujeta a confirmación probabilística</option>
+              <option value="afirmacion_incondicional_verdadera">Una afirmación incondicional que se asume siempre verdadera en ese mundo</option>
+              <option value="variable_de_entorno">Una variable de entorno del sistema operativo</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 7-10 ("Hechos", "Predicados monádicos y poliádicos", "Interpretación y orden").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 3: El Intérprete y Consultas en la Consola ?- -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 3: El Intérprete y Consultas en la Consola ?-</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          En la consola <code>?-</code>, el usuario no da órdenes imperativas, sino que formula preguntas para comprobar si se deducen de la base. Analiza la semántica de las consultas:
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Proceso de Matching / Unificación:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué condiciones exige Prolog para que una consulta concuerde con un hecho?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej3_interprete_consultas" data-key="proceso_matching" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Condiciones de Matching --</option>
+                <option value="solo_mismo_nombre">Que coincida únicamente el nombre del predicado</option>
+                <option value="unificacion_predicado_aridad_argumentos">Mismo predicado, mismo número de argumentos (aridad) y argumentos unificables</option>
+                <option value="orden_alfabetico">Que los términos estén ordenados alfabéticamente</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Significado de la respuesta "Yes":</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué certifica formalmente Prolog al devolver Yes?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej3_interprete_consultas" data-key="significado_respuesta_yes" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Significado de Yes --</option>
+                <option value="se_deduce_de_la_base_de_conocimiento">Que la consulta se deduce lógicamente a partir de los hechos y reglas de la KB</option>
+                <option value="esta_guardado_en_disco">Que el archivo se guardó con éxito en el disco</option>
+                <option value="es_verdad_en_el_mundo_real">Que es una verdad absoluta en el mundo físico real</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Significado de la respuesta "No" (Negación como Falla):</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Por qué 'No' no significa necesariamente 'falso'?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej3_interprete_consultas" data-key="significado_respuesta_no" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Significado de No --</option>
+                <option value="error_de_red">Indica que se perdió la conexión con el servidor web</option>
+                <option value="no_se_deduce_por_negacion_como_falla">Significa que NO se deduce de la KB actual (falla la prueba, Supuesto de Mundo Cerrado)</option>
+                <option value="sentencia_contradictoria">Indica que la base contiene una contradicción matemática</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Uso del Punto y Coma ";" en Consultas:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué ocurre al presionar ';' tras obtener una ligadura válida?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej3_interprete_consultas" data-key="peticion_mas_respuestas_puntoycoma" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Acción de ';' --</option>
+                <option value="reinicia_la_terminal">Borra la pantalla y reinicia el entorno</option>
+                <option value="fuerza_backtracking_para_siguiente_solucion">Fuerza Backtracking para que el motor busque la siguiente solución válida</option>
+                <option value="guarda_en_archivo">Exporta la variable a un archivo de texto plano</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 11-13 ("Consultas", "Matching", "Respuestas Yes/No").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 4: Variables y Consultas con Ligaduras -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 4: Variables, Ligaduras e Instanciación</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Las variables permiten formular preguntas genéricas en la base de conocimiento (ej. <i>¿Qué objetos le gustan a María?</i>). Analiza sus estados y roles:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Estado de Variable "Libre" (Unbound):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué caracteriza a una variable antes del matching?</p>
+            <select data-ex="ej4_variables_ligaduras" data-key="estado_variable_libre" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Estado libre --</option>
+              <option value="contiene_cero_por_defecto">Tiene asignado el número 0 por defecto</option>
+              <option value="no_tiene_valor_asignado_inicialmente">No tiene valor asignado inicialmente y puede ligarse a cualquier término</option>
+              <option value="apunta_a_null">Es un puntero nulo de memoria C</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Proceso de Ligadura (Binding / Instantiation):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cuándo se liga una variable durante la consulta?</p>
+            <select data-ex="ej4_variables_ligaduras" data-key="proceso_ligadura" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Proceso de ligadura --</option>
+              <option value="en_tiempo_de_compilacion">En tiempo de compilación antes de cargar el archivo</option>
+              <option value="instanciacion_durante_el_matching">Cuando el motor encuentra un hecho compatible en la KB que satisface la meta</option>
+              <option value="al_cerrar_el_programa">Solo al cerrar la sesión de Prolog</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. La Variable Anónima "_":</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Por qué usar <code>es_padre(X) :- padre(X, _).</code>?</p>
+            <select data-ex="ej4_variables_ligaduras" data-key="rol_variable_anonima" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Rol de la variable anónima --</option>
+              <option value="borra_el_hijo">Elimina los registros del hijo de la base</option>
+              <option value="ignora_argumento_sin_importar_valor">Indica que no importa el valor del segundo argumento (solo que exista)</option>
+              <option value="fuerza_valor_booleano">Convierte el predicado en una función matemática</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Consulta con Múltiples Soluciones:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Dado <code>?- padre(juan, X).</code>, ¿qué resultados genera?</p>
+            <select data-ex="ej4_variables_ligaduras" data-key="consulta_multiple_instanciaciones" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Múltiples soluciones --</option>
+              <option value="solo_la_primera_coincidencia">Se detiene para siempre en soltero sin admitir más</option>
+              <option value="devuelve_todos_los_valores_que_satisfacen">Devuelve sucesivamente soltero, rosario y carlos mediante backtracking</option>
+              <option value="arroja_error_por_duplicados">Lanza error de clave duplicada</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 14-15 ("Variables", "Variables libres y ligadas") y Slide 22.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 5: Conjunciones Lógicas y el Mecanismo de Backtracking -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 5: Conjunciones Lógicas y el Mecanismo de Backtracking</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Una consulta con múltiples metas exige conjunción lógica. Comprende el orden de evaluación y la vuelta atrás:
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Operador de Conjunción en Prolog:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué carácter representa el conector lógico AND entre metas?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej5_conjunciones_backtracking" data-key="operador_conjuncion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Operador de conjunción --</option>
+                <option value="signo_mas">El signo más '+'</option>
+                <option value="coma_representa_and_logico">La coma ',' que enlaza múltiples objetivos en simultáneo</option>
+                <option value="punto_y_coma_or">El punto y coma ';'</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Dirección de Evaluación:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">En <code>?- obj1, obj2, obj3.</code>, ¿en qué orden se satisfacen?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej5_conjunciones_backtracking" data-key="direccion_evaluacion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Orden de evaluación --</option>
+                <option value="aleatorio_concurrentemente">En paralelo aleatorio según los hilos de CPU</option>
+                <option value="estricta_de_izquierda_a_derecha">Estrictamente de izquierda a derecha</option>
+                <option value="de_derecha_a_izquierda">De derecha a izquierda (LIFO)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Definición de Backtracking:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué realiza el motor cuando un objetivo posterior fracasa?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej5_conjunciones_backtracking" data-key="definicion_backtracking" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Backtracking --</option>
+                <option value="aborta_el_proceso">Aborta inmediatamente todo el programa con error</option>
+                <option value="vuelta_atras_para_buscar_caminos_alternativos">Vuelve atrás al último punto de elección para intentar satisfacer el objetivo previo con otra opción</option>
+                <option value="crea_una_nueva_regla">Crea una nueva regla automáticamente en memoria</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Desinstanciación de Variables:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué les sucede a las variables ligadas durante la vuelta atrás?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej5_conjunciones_backtracking" data-key="desinstanciacion_variables" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Desinstanciación --</option>
+                <option value="mantienen_su_valor">Conservan el valor previo de forma inmutable</option>
+                <option value="libera_ligaduras_para_reintentar">Se liberan de sus ligaduras para permitir nuevas asignaciones compatibles</option>
+                <option value="pasan_a_ser_constantes">Pasan a ser tratadas como átomos fijos</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 16-17 ("Conjunciones", "Instanciar y desinstanciar", "Reevaluación con backtracking").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 6: Estructura de Reglas y Cláusulas de Horn -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 6: Reglas y Cláusulas de Horn (Cabeza :- Cuerpo.)</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Una regla describe dependencias entre objetos de forma compacta mediante el operador <code>:-</code>. Identifica su estructura lógica:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. El Operador Cuello ":-":</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué sentido lógico tiene en una regla Prolog?</p>
+            <select data-ex="ej6_reglas_clausulas_horn" data-key="operador_cuello_regla" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Sentido de ':-' --</option>
+              <option value="implicacion_hacia_la_derecha">Implicación hacia la derecha (entonces)</option>
+              <option value="representa_el_condicional_si">Representa el condicional 'si' (implicación hacia la izquierda: &Leftarrow;)</option>
+              <option value="igualdad_aritmetica">Comparación de igualdad aritmética</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Lectura Declarativa de una Regla:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se lee <code>cabeza :- cuerpo.</code>?</p>
+            <select data-ex="ej6_reglas_clausulas_horn" data-key="lectura_declarativa_regla" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Lectura declarativa --</option>
+              <option value="cuerpo_se_ejecuta_primero">Se ejecuta el cuerpo y luego se asigna la cabeza</option>
+              <option value="cabeza_es_cierta_si_se_cumple_cuerpo">La cabeza es cierta si todos los objetivos del cuerpo se cumplen</option>
+              <option value="ambos_son_falsos">Ambos deben ser falsos para activar la regla</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Alcance de las Variables en Reglas:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo están cuantificadas las variables dentro de una regla?</p>
+            <select data-ex="ej6_reglas_clausulas_horn" data-key="alcance_variables_regla" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Alcance de variables --</option>
+              <option value="variables_globales_compartidas">Son variables globales compartidas entre todos los archivos</option>
+              <option value="cuantificadas_universalmente_en_la_regla">Están cuantificadas universalmente para esa cláusula específica</option>
+              <option value="constantes_locales">Son constantes locales de una sola función</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Ejemplo Canónico de Regla:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">En <code>es_amigo_de(juan, X) :- le_gusta_a(X, coche).</code>:</p>
+            <select data-ex="ej6_reglas_clausulas_horn" data-key="regla_amigos_autos" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Significado formal --</option>
+              <option value="juan_vende_coches">Juan vende coches a todas las personas X</option>
+              <option value="es_amigo_si_a_otro_le_gustan_coches">Juan es amigo de cualquier individuo X siempre que a X le gusten los coches</option>
+              <option value="todos_son_amigos_de_juan">Todas las personas son amigas de Juan incondicionalmente</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 18-20 ("Reglas", "Estructura Cabeza :- Cuerpo", "Programa de ejemplo").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 7: El Árbol Familiar: Hechos y Relaciones Directas -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 7: El Árbol Familiar: Hechos y Relaciones Directas</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Basándote en el árbol genealógico de la Diapositiva 22 (ver diagrama en el panel superior), formaliza los hechos directos y la regla general de <code>progenitor/2</code>:
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Progenitores de Belén:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Quiénes son el padre y la madre directos de Belén?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej7_arbol_familiar_hechos" data-key="padres_belen" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Padres de Belén --</option>
+                <option value="juan_y_maria">Juan y María</option>
+                <option value="victor_y_consuelo">Víctor (padre) y Consuelo (madre)</option>
+                <option value="carlos_y_rosario">Carlos y Rosario</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Progenitores de Carlos, Soltero y Rosario:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Quiénes son los padres de esta tríada de hermanos?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej7_arbol_familiar_hechos" data-key="padres_carlos" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Padres de Carlos --</option>
+                <option value="victor_y_consuelo">Víctor y Consuelo</option>
+                <option value="juan_y_maria">Juan (padre) y María (madre)</option>
+                <option value="belen_y_victor">Belén y Víctor</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Hijos del matrimonio Carlos y Belén:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Quiénes son los dos hijos de Carlos y Belén?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej7_arbol_familiar_hechos" data-key="hijos_carlos_belen" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Hijos de Carlos y Belén --</option>
+                <option value="soltero_y_rosario">Soltero y Rosario</option>
+                <option value="carlitos_y_elena">Carlitos y Elena</option>
+                <option value="victor_y_juan">Víctor y Juan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Definición de la Regla Disyuntiva Progenitor:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se implementa <code>progenitor(X, Y)</code> en Prolog?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej7_arbol_familiar_hechos" data-key="definicion_progenitor_disyuncion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Regla progenitor --</option>
+                <option value="en_un_solo_predicado_con_and">progenitor(X, Y) :- padre(X, Y), madre(X, Y).</option>
+                <option value="dos_clausulas_padre_o_madre">Dos cláusulas separadas: progenitor(X, Y) :- padre(X, Y). y progenitor(X, Y) :- madre(X, Y).</option>
+                <option value="con_bucle_while">Mediante un bucle while que recorre la lista</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 21-22 ("Ejercicios Propuestos: Árbol familiar, relaciones padre/madre").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 8: Reglas Genealógicas: Abuelos y Hermanos con Exclusión de Identidad -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 8: Reglas Genealógicas: Abuelos y Hermanos con Desigualdad</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          La deducción de relaciones compuestas exige concatenar objetivos intermedios y evitar la coincidencia reflexiva de identidad:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Regla canónica de Abuelo:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se deduce formalmente <code>abuelo(X, Y)</code>?</p>
+            <select data-ex="ej8_reglas_abuelos_hermanos" data-key="regla_abuelo_progenitor" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Regla de abuelo --</option>
+              <option value="padre_directo_sin_intermedio">abuelo(X, Y) :- padre(X, Y).</option>
+              <option value="padre_del_progenitor_intermedio">abuelo(X, Y) :- padre(X, Z), progenitor(Z, Y).</option>
+              <option value="hermano_del_padre">abuelo(X, Y) :- hermano(X, Z), padre(Z, Y).</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Regla canónica de Abuela:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se deduce formalmente <code>abuela(X, Y)</code>?</p>
+            <select data-ex="ej8_reglas_abuelos_hermanos" data-key="regla_abuela_madre" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Regla de abuela --</option>
+              <option value="madre_del_progenitor_intermedio">abuela(X, Y) :- madre(X, Z), progenitor(Z, Y).</option>
+              <option value="esposa_del_hijo">abuela(X, Y) :- madre(X, Y), mujer(X).</option>
+              <option value="abuela_por_adopcion">abuela(X, Y) :- progenitor(X, Y), mujer(Y).</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Operador de Desigualdad en Prolog:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cuál es el operador que afirma que X e Y son distintos?</p>
+            <select data-ex="ej8_reglas_abuelos_hermanos" data-key="operador_desigualdad_hermano" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Operador de desigualdad --</option>
+              <option value="signo_exclamacion_igual">X != Y (estilo C / Java)</option>
+              <option value="operador_barra_inversa_igual_diferente">X \= Y (barra invertida e igual de Prolog)</option>
+              <option value="menor_mayor">X &lt;&gt; Y (estilo SQL)</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Consecuencia de Omitir "X \= Y":</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué anomalía ocurre si defines <code>hermano(X,Y):- progenitor(P,X), progenitor(P,Y).</code>?</p>
+            <select data-ex="ej8_reglas_abuelos_hermanos" data-key="consecuencia_omitir_desigualdad" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Anomalía sin desigualdad --</option>
+              <option value="error_sintactico_fatal">El código arroja un error fatal de compilación</option>
+              <option value="persona_resulta_hermana_de_si_misma">Cualquier persona resulta hermana de sí misma al compartir sus propios padres</option>
+              <option value="elimina_los_hombres">Solo encuentra hermanas mujeres</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 21-22 ("Define reglas: Quién es abuelo/a, Quién es hermano/a").</p>
+            <p><strong>TP N° 5 (Laboratorio I):</strong> Ejercicio 6 ("Igualdad y relaciones de parentesco en LPO").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 9: Reglas Avanzadas de Parentesco: Tíos y Primos -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 9: Parentesco Avanzado: Tíos, Primos y Reglas Unarias</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          A partir de los predicados base, formaliza relaciones genealógicas de segundo grado y el uso de reglas unarias:
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Definición formal de Tío/Tía:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se formula <code>tio(X, Y)</code> en Prolog?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej9_parentesco_avanzado" data-key="regla_tio_paterno_materno" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Regla de tío --</option>
+                <option value="padre_del_primo">tio(X, Y) :- padre(X, Z), hermano(Z, Y).</option>
+                <option value="hermano_masculino_del_progenitor">tio(X, Y) :- hermano(X, P), progenitor(P, Y).</option>
+                <option value="abuelo_masculino">tio(X, Y) :- abuelo(X, Y), hombre(X).</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Deducción de Primos en la Familia:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué relación guardan los hijos de dos hermanos?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej9_parentesco_avanzado" data-key="regla_primo_carlitos_rosario" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Definición de primo --</option>
+                <option value="hijos_del_mismo_padre">Son hermanos si tienen el mismo progenitor</option>
+                <option value="hijos_de_hermanos_respectivos">Son primos si sus progenitores respectivos son hermanos entre sí</option>
+                <option value="coincidencia_de_genero">Son primos solo si ambos son del mismo sexo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Relación entre Belén y Rosario en el Árbol:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Dado que Rosario es hermana de Carlos y Carlos está casado con Belén:</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej9_parentesco_avanzado" data-key="relacion_belen_rosario" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Parentesco por afinidad --</option>
+                <option value="son_madre_e_hija">Son madre e hija biológicas</option>
+                <option value="cuñadas_por_matrimonio_carlos">Son cuñadas (Rosario es tía paterna de los hijos de Belén)</option>
+                <option value="son_hermanas_directas">Son hermanas consanguíneas directas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Regla Unaria: "¿Quién es Padre?":</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se formula <code>es_padre(X)</code> utilizando la variable anónima?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej9_parentesco_avanzado" data-key="determinacion_quien_es_padre_unario" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Regla es_padre/1 --</option>
+                <option value="padre_con_variable_anonima">es_padre(X) :- padre(X, _).</option>
+                <option value="padre_sin_argumentos">es_padre(X) :- padre(X).</option>
+                <option value="padre_con_hijo_fijo">es_padre(X) :- padre(X, carlitos).</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slides 21-22 ("Define reglas que permitan saber: Quién es padre/madre, Quién es hermana/hermano").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Ejercicio 10: Ejecución y Entornos de Desarrollo: SWISH vs. OneCompiler -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 10: Ejecución y Entornos de Desarrollo: SWISH vs. OneCompiler</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          La interacción con Prolog difiere según el entorno utilizado. Compara las características de SWISH y OneCompiler y los principios de control de ejecución:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Entorno Oficial SWISH (SWI-Prolog):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué ventaja didáctica ofrece frente a otros compiladores?</p>
+            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="entorno_swish_interactivo" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Ventaja de SWISH --</option>
+              <option value="solo_admite_lenguaje_c">Compila a lenguaje C de alto rendimiento</option>
+              <option value="consola_nativa_con_backtracking_step_by_step">Consola interactiva '?-' nativa con botón 'Next' para inspeccionar el Backtracking paso a paso</option>
+              <option value="no_permite_reglas">Solo permite hechos sin admitir reglas deductivas</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Entorno OneCompiler (Modo Batch):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué requerimiento tiene OneCompiler para ejecutar código Prolog?</p>
+            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="modo_ejecucion_onecompiler" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Modo de OneCompiler --</option>
+              <option value="modo_batch_requiere_initialization_main">Ejecuta por lotes (batch) requiriendo ':- initialization(main).' y comandos write/nl para mostrar salida</option>
+              <option value="no_soporta_prolog">No cuenta con soporte para Prolog</option>
+              <option value="requiere_servidor_pago">Exige una suscripción de pago obligatoria</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Estrategia de Búsqueda SLD del Motor:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo recorre el árbol de resolución el motor de SWI-Prolog?</p>
+            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="resolucion_sld_profundidad" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Búsqueda SLD --</option>
+              <option value="bfs_en_anchura">Búsqueda en Anchura con cola FIFO</option>
+              <option value="busqueda_dfs_con_vuelta_atras">Búsqueda en Profundidad Primero (DFS) de izquierda a derecha con Backtracking</option>
+              <option value="algoritmo_genetico">Algoritmo genético con mutación de reglas</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Peligro de la Recursión por Izquierda:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué riesgo existe al definir <code>ancestro(X, Y) :- ancestro(X, Z), progenitor(Z, Y).</code>?</p>
+            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="peligro_recursion_izquierda" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Recursión izquierda --</option>
+              <option value="optimiza_la_velocidad">Optimiza la velocidad al doble</option>
+              <option value="bucle_infinito_por_llamada_recursiva_antes_de_base">Bucle infinito y desbordamiento de pila al llamarse a sí misma antes de evaluar el caso base</option>
+              <option value="borra_los_hechos">Sobrescribe los hechos de progenitor en la memoria</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong>Presentación Clase 7:</strong> Slide 5 ("SWI - PROLOG") y Slide 23 ("Programa Prolog: conjunto de cláusulas Horn, orden de las cláusulas").</p>
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 9.5 pp. 294-296):</strong> Control de ejecución, orden de cláusulas y recursión en Prolog.</p>
+          </div>
+        </details>
+      </section>
+
+    </div>
+
+    <!-- Panel Inferior de Finalización y Exportación -->
+    <section class="p-8 rounded-2xl bg-sky-900/10 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800/50 text-center space-y-6">
+      <h3 class="text-2xl font-bold text-sky-700 dark:text-sky-400">Finalizar y Entregar Trabajo Práctico</h3>
+      <p class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+        Verifica que tu indicador superior marque el <span class="font-bold text-sky-600 dark:text-sky-400">100% de progreso</span>. Descarga el archivo <span class="font-mono text-sky-600 dark:text-sky-400 font-semibold">respuestas_tp6.json</span>, colócalo en la raíz de tu repositorio clonado y autoevalúate localmente con Python antes del envío final con Git.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <button id="btn-preview-json" class="px-6 py-3 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition font-medium flex items-center justify-center gap-2">
+          <span>👁️</span> Previsualizar JSON en Pantalla
+        </button>
+        <button id="btn-export-json-footer" class="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white shadow-lg shadow-sky-600/30 transition font-medium transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+          <span>📥</span> Generar y Descargar respuestas_tp6.json
+        </button>
+      </div>
+
+      <div id="preview-container" class="hidden mt-6 text-left max-w-2xl mx-auto">
+        <div class="bg-slate-900 rounded-xl overflow-hidden shadow-2xl border border-slate-700">
+          <div class="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+            <span class="text-xs text-slate-400 font-mono">respuestas_tp6.json</span>
+            <button id="btn-copy-json" class="text-xs px-3 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded transition font-medium">📋 Copiar al Portapapeles</button>
+          </div>
+          <pre class="p-4 overflow-x-auto text-xs md:text-sm font-mono text-sky-300 max-h-96"><code id="preview-code"></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Bibliografía -->
+  <div id="modal-biblio" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200 dark:border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <span>📚</span> Guía Bibliográfica Oficial (TP 6)
+        </h3>
+        <button id="close-modal-biblio" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <p><strong>Clases Teóricas:</strong> Presentación <span class="font-mono text-sky-600 dark:text-sky-400 font-semibold">7 - Lógica aplicada en PROLOG.pptx</span> (Ing. Fabio D. Argañaraz).</p>
+        <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="text-sky-600 dark:text-sky-400 underline hover:text-sky-500 font-medium">Russell & Norvig</a>:</strong></p>
+        <ul class="list-disc pl-5 space-y-1 text-xs md:text-sm">
+          <li><strong>Capítulo 9.5:</strong> Programación lógica y Prolog (Cláusulas de Horn, resolución SLD, backtracking, negación como falla y control de ejecución).</li>
+        </ul>
+        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1">
+          <p class="font-semibold text-sky-600 dark:text-sky-400">💻 Entornos Recomendados:</p>
+          <ul class="list-disc pl-5 space-y-0.5 text-xs">
+            <li><a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="underline text-sky-400">SWISH (SWI-Prolog Online)</a>: Interactivo con prompt `?-` y botón Next.</li>
+            <li><a href="https://onecompiler.com/prolog" target="_blank" rel="noopener noreferrer" class="underline text-sky-400">OneCompiler Prolog</a>: Ejecución por script batch.</li>
+            <li><a href="https://www.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="underline text-sky-400">SWI-Prolog Oficial</a>: Instalador para Windows/Linux/Mac.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Git -->
+  <div id="modal-git" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200 dark:border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <span>🐙</span> Instructivo de Entrega con Git
+        </h3>
+        <button id="close-modal-git" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+        <p>1. Exporta el archivo <span class="font-mono text-sky-500 font-semibold">respuestas_tp6.json</span> en la raíz de tu repositorio clonado.</p>
+        <p>2. Ejecuta el autoevaluador oficial en tu consola local (requiere Python 3):</p>
+        <div class="p-3 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-300 dark:border-slate-800 font-mono text-xs text-sky-600 dark:text-sky-300">
+          python autograder_tp6.py respuestas_tp6.json
+        </div>
+        <p>3. Registra tu entrega con Git:</p>
+        <div class="p-3 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-300 dark:border-slate-800 font-mono text-xs text-slate-800 dark:text-slate-300 space-y-1">
+          <div>git add respuestas_tp6.json</div>
+          <div>git commit -m "Entrega final TP6 - Juan Perez"</div>
+        </div>
+        <p>4. Sube tu entrega a tu repositorio personal en GitHub:</p>
+        <div class="p-3 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-300 dark:border-slate-800 font-mono text-xs text-sky-600 dark:text-sky-300">
+          git push origin main
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

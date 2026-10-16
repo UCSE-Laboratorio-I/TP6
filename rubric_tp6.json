@@ -1,0 +1,115 @@
+{
+  "tp_metadata": {
+    "tp_id": "LAB1-2026-TP6",
+    "title": "TP N° 6: Programación Lógica Aplicada en Prolog",
+    "catedra": "Laboratorio I - Tecnicatura Universitaria en Automatización y Robótica / Informática",
+    "version": "1.0.0"
+  },
+  "security": {
+    "algorithm": "SHA-256 + Salted HMAC",
+    "protected": true
+  },
+  "max_score": 100,
+  "exercises": {
+    "ej1_sintaxis_prolog": {
+      "weight": 10,
+      "feedback": "En la sintaxis de Prolog (Edimburgo/SWI), los átomos y nombres de predicados deben comenzar con minúscula, las variables con mayúscula o guión bajo '_', cada cláusula finaliza obligatoriamente con un punto '.' y la aridad indica el número exacto de argumentos (Clase 7 Slides 6-10, 14).",
+      "hashes": {
+        "regla_minusculas_atomos": "40dfe19f45c6575e24c42513112610fb3f29b4ddce68079715cb699fa074bc32",
+        "regla_mayusculas_variables": "08cc6a78a6e4b46128330fa38e35d3acf403720d1feaca973bac95618aed615e",
+        "concepto_aridad": "e583a56fb34003899a990a8b441e5a0ec1e1b5ff146e06f57cd7eadc61f94386",
+        "rol_punto_final": "3c5c7a058ea26146f95f280e2b3df1660d43b507fc3064dc759f8ea62b49e766"
+      }
+    },
+    "ej2_declaracion_hechos": {
+      "weight": 10,
+      "feedback": "Los hechos declaran propiedades incondicionales de objetos o tuplas de relaciones. Los predicados monádicos expresan propiedades de un único objeto (ej. valioso(diamante).), mientras que los poliádicos expresan relaciones entre múltiples objetos donde el orden de los argumentos define la interpretación semántica (Clase 7 Slides 7-10).",
+      "hashes": {
+        "predicado_monadico": "ac27ecd61f197068413f2d0b6bd99837dab42d65e7aa015e0a8760ccdbbf7c75",
+        "predicado_poliadico": "c47387ea6c7b6a8946e1835c1e35fca83e6d29fe0f9c26201e513c1a8bfa82cc",
+        "orden_argumentos_semantica": "336fe3f3f8463f216725228ce2c87d973c9e32ef0c8bcd9fe64728e6292f4ab1",
+        "hecho_verdadero_kb": "20bc0e94be896758785ef49e41d9e8ec2d58bcb75a820bcb3af6a2136b836850"
+      }
+    },
+    "ej3_interprete_consultas": {
+      "weight": 10,
+      "feedback": "Una consulta '?-' busca unificar con la base de conocimiento. 'Yes' indica que se deduce lógicamente de la base; 'No' significa que no se puede deducir (Negación como Falla bajo Supuesto de Mundo Cerrado CWA, no falsedad real). Con punto y coma ';' se solicita la siguiente solución mediante backtracking (Clase 7 Slides 11-13).",
+      "hashes": {
+        "proceso_matching": "e12f86f13c266f1042841f79bcca52562d4a441728f3c3da82aa9ab973b0d08e",
+        "significado_respuesta_yes": "7cbb357c3da2315ffc861e0c48b64d68b2b998ef430f597cd7aed078f79d66c9",
+        "significado_respuesta_no": "6306c164534fcdbb9aa35a1501e2012b6e51a3c6e74b0070ce2bb9cd14bf5ff6",
+        "peticion_mas_respuestas_puntoycoma": "c435f42efd7e8daed51c05cdcdf4cf5633a8394913ec38eaebf135abb3fa2672"
+      }
+    },
+    "ej4_variables_ligaduras": {
+      "weight": 10,
+      "feedback": "Una variable en Prolog comienza libre (unbound) y al hacer matching se liga (instancia) a un valor específico del dominio. La variable anónima '_' se utiliza cuando el valor del argumento no es de interés para la consulta o regla, evitando advertencias de variables singleton (Clase 7 Slides 14-15, 22).",
+      "hashes": {
+        "estado_variable_libre": "b3871d9c358ddb2f7d43261e3dabf32f31cfb59a4756d192bcd925d9af73d79d",
+        "proceso_ligadura": "21ebd4b66ffd2ffd483cdff3a64d2f30645c1087897dba3f2f0f8f184f198753",
+        "rol_variable_anonima": "e77f274ce62b2fe27f2a74dd035497bbb6412aa253a4767c3a20375736d57132",
+        "consulta_multiple_instanciaciones": "074e69053c4e8c4c62ac4e0ac19f27d7b1c28d0107cac327791c9578cf35527b"
+      }
+    },
+    "ej5_conjunciones_backtracking": {
+      "weight": 10,
+      "feedback": "La coma ',' representa la conjunción lógica (AND) y Prolog evalúa los objetivos estrictamente de izquierda a derecha. Al alcanzar un éxito, marca un punto de elección; si un objetivo posterior fracasa, el motor ejecuta Backtracking volviendo atrás, desinstanciando variables y probando caminos alternativos (Clase 7 Slides 16-17).",
+      "hashes": {
+        "operador_conjuncion": "c3b7991f83a8a4848d18ac243d5a8fdd6e97db70116d57c455815aae0bbf177c",
+        "direccion_evaluacion": "4a23a75eacd642fe660869478e4941b7a9455e93a0c32fa8a2a204d3894f03fc",
+        "definicion_backtracking": "6f3441b5da58458fa1e6d5b9529c437604cdbff0a7bb394e247719c5a9d23591",
+        "desinstanciacion_variables": "4f2c7170f7f45a0713e16623408d8e45631a081ddd1d77178efffd0da024e641"
+      }
+    },
+    "ej6_reglas_clausulas_horn": {
+      "weight": 10,
+      "feedback": "Una regla tiene la forma 'Cabeza :- Cuerpo.', donde ':-' se lee 'si' (implicación hacia la izquierda). Las variables presentes en la cabeza y cuerpo están cuantificadas universalmente para la regla y permiten describir relaciones generales a partir de hechos particulares (Clase 7 Slides 18-20).",
+      "hashes": {
+        "operador_cuello_regla": "6fed239c0417b59051f6c8195804225a57cd1e2cb567afaec51ab1db3e6edd27",
+        "lectura_declarativa_regla": "10eb26f4786f57240bdf14aca1612198525242447967d9681b038a0951ab6487",
+        "alcance_variables_regla": "160eaa95981924e837ef64595c5dcfc0b2612e8d09475f79aa522395a26a6984",
+        "regla_amigos_autos": "4920ed42ef73a6f07e0f3b6a3682f3d6dae585edb27a270656f34e8caf174921"
+      }
+    },
+    "ej7_arbol_familiar_hechos": {
+      "weight": 10,
+      "feedback": "En el árbol genealógico propuesto en clase (Slide 22): Victor y Consuelo son padres de Belen; Juan y Maria son padres de Soltero, Rosario y Carlos; y Carlos y Belen son padres de Carlitos y Elena. La regla 'progenitor(X, Y)' se define con dos cláusulas disyuntivas: progenitor por padre o progenitor por madre (Clase 7 Slides 21-22).",
+      "hashes": {
+        "padres_belen": "ef1c48194ed491c5e36ba5b8cac75f1e9a652e31ac25dbd559783d013105f9fa",
+        "padres_carlos": "1037db7b934d50f404d1da18ee34efb5663cc58d6e1df3c81bd21c89f173fc42",
+        "hijos_carlos_belen": "45ee8b3db633b7d3f366d5d8d4a61240de002f2f767e15828957a119a8180593",
+        "definicion_progenitor_disyuncion": "4c799b9f5ac09d9827c0328bb6657955557fb24fbf8db02c0fb98787e7bb31c4"
+      }
+    },
+    "ej8_reglas_abuelos_hermanos": {
+      "weight": 10,
+      "feedback": "Un abuelo es el padre del progenitor de alguien: 'abuelo(X, Y) :- padre(X, Z), progenitor(Z, Y).'. Dos personas son hermanas si comparten el mismo progenitor y son individuos distintos: es obligatorio incluir 'X \\= Y' para evitar que una persona sea hermana de sí misma (Clase 7 Slides 21-22, TP5 Ej. 6).",
+      "hashes": {
+        "regla_abuelo_progenitor": "73f5812e3f9b05e058e22b5e1864c9ddc92495b367aba99b94676011a552d937",
+        "regla_abuela_madre": "818819ad8e6531315bba493d301d2689fd12340577180dce1cd43728518c81fd",
+        "operador_desigualdad_hermano": "ab52eb7bab1af594da691e8fde60044f3b6d69a8f3a6d56c6a3ae5d2d64b04e4",
+        "consecuencia_omitir_desigualdad": "5cdabdc0c59b2c1593e5b566ff5d09b1a4d7cc1475ef5a7ecde36c4652e9574f"
+      }
+    },
+    "ej9_parentesco_avanzado": {
+      "weight": 10,
+      "feedback": "Un tío X de Y es hermano del progenitor de Y: 'tio(X, Y) :- hombre(X), hermano(X, P), progenitor(P, Y).'. Los primos son hijos de hermanos. Por ello, Rosario y Soltero son tíos de Carlitos y Elena, mientras que Victor y Juan son los dos abuelos masculinos de Carlitos (Clase 7 Slides 21-22).",
+      "hashes": {
+        "regla_tio_paterno_materno": "355e2121984654580cb0acf232a5d4edca0a9a2357b99216a821253250f0e1cd",
+        "regla_primo_carlitos_rosario": "6c46a4874721428a5ed8513c1f2a3314798c467236045973f7669790087d3ca8",
+        "relacion_belen_rosario": "9a078f25b18ec6442ad8b3e4500f49ce10727697282a4787e9fd97a4e9031d5b",
+        "determinacion_quien_es_padre_unario": "b7522c34e7fe208712e1a94b7bf5dcbdb4e129dd8401ec95e06bf3d02a1a4106"
+      }
+    },
+    "ej10_entornos_swish_vs_onecompiler": {
+      "weight": 10,
+      "feedback": "SWISH es el entorno interactivo nativo oficial de SWI-Prolog que ofrece una consola '?-' con backtracking paso a paso (Next) y es ideal para el aprendizaje declarativo. OneCompiler ejecuta en modo batch/script por lo que requiere una directiva ':- initialization(main).' y comandos write/nl, siendo útil para scripts completos (Clase 7 Slide 5).",
+      "hashes": {
+        "entorno_swish_interactivo": "7544cf7ce1e4471d00d7c0fe2e460ead79921944c2ab07249560a9be8261d525",
+        "modo_ejecucion_onecompiler": "2b6501a33b584de14339248394025a992debba1c362c965b4aa378fdbc0d896f",
+        "resolucion_sld_profundidad": "db2eb4812bce3fabcc860be50da2b88cf4aaca6ac4a4b384165cdd8feda9a0db",
+        "peligro_recursion_izquierda": "aed911911868927a2618f9f0e7e4ee02fe9bf72fe6e949fa3f3db3b3122a2873"
+      }
+    }
+  }
+}
