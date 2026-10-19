@@ -17,23 +17,20 @@
 - Dominar la conjunción lógica (coma `,`), el orden secuencial de evaluación de izquierda a derecha y el mecanismo de **Backtracking (vuelta atrás)** mediante el punto y coma `;` o el botón *Next*.
 - Programar reglas deductivas mediante **Cláusulas de Horn** (`Cabeza :- Cuerpo.`) y el operador de desigualdad `X \= Y` para exclusión de identidad.
 - Resolver e implementar computacionalmente el **Árbol Genealógico Familiar** de la clase (Víctor, Consuelo, Belén, Juan, María, Carlos, Rosario, Soltero, Carlitos, Elena) deduciendo reglas de `progenitor`, `abuelo/abuela`, `padre/madre`, `hermano/hermana`, `tio/tia` y `primo/prima`.
-- Experimentar con compiladores en línea: **SWISH (SWI-Prolog for Sharing)** y **OneCompiler**.
+- Experimentar con el entorno en línea: **SWISH (SWI-Prolog for Sharing)** y la consola interactiva de **SWI-Prolog**.
 
 ---
 
 ## 💻 Entornos de Desarrollo para Prolog
 
-Para realizar las pruebas y ejecutar el código del árbol genealógico (`familia.pl`), puedes utilizar cualquiera de estas tres opciones:
+Para realizar las pruebas y ejecutar el código del árbol genealógico (`familia.pl`), puedes utilizar cualquiera de estas dos opciones:
 
 1. **[SWISH (SWI-Prolog for Sharing)](https://swish.swi-prolog.org/) [RECOMENDADO DE CÁTEDRA]:**
    - Entorno web oficial de SWI-Prolog.
    - Permite escribir la Base de Conocimiento en el panel izquierdo y realizar consultas interactivas `?-` en el panel inferior derecho, explorando soluciones sucesivas mediante el botón **Next** (Backtracking interactivo).
-2. **[OneCompiler Prolog](https://onecompiler.com/prolog):**
-   - Entorno online rápido y minimalista.
-   - Ejecuta en modo por lotes (*batch*), ideal para scripts directos que utilicen `:- initialization(main).` y `write/nl`.
-3. **SWI-Prolog Local (Windows / Linux / macOS):**
+2. **SWI-Prolog Local (Windows / Linux / macOS):**
    - Descarga gratuita desde [swi-prolog.org](https://www.swi-prolog.org/).
-   - Permite cargar el archivo con `['familia.pl'].` y consultar en la terminal local de tu computadora.
+   - Permite cargar el archivo con `['familia.pl'].` o `consult('familia.pl').` y consultar en la terminal local de tu computadora.
 
 ---
 
@@ -57,7 +54,7 @@ Este Trabajo Práctico es 100% interactivo y autoevaluable:
    git clone https://github.com/TU_USUARIO/TP6.git
    cd TP6
    ```
-3. **Resolución Interactiva en el Navegador:** Abre el archivo `index.html` con doble clic en tu navegador. Puedes consultar el código de `familia.pl` integrado, probarlo en SWISH o OneCompiler, y resolver los 10 ejercicios interactivos. Tu progreso se guarda automáticamente en `localStorage`.
+3. **Resolución Interactiva en el Navegador:** Abre el archivo `index.html` con doble clic en tu navegador. Puedes consultar el código de `familia.pl` integrado, probarlo en SWISH, y resolver los 10 ejercicios interactivos. Tu progreso se guarda automáticamente en `localStorage`.
 4. **Exportar JSON de Respuestas:** Al alcanzar el 100% de progreso, haz clic en **`💾 Exportar JSON`** y guarda el archivo `respuestas_tp6.json` en la raíz del repositorio local.
 5. **Autoevaluación Local (Recomendada):** Con Python 3 instalado en tu terminal:
    ```bash

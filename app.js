@@ -5,7 +5,6 @@ const STORAGE_KEY = `tp${TP_NUM}_progress_v1`;
 document.addEventListener("DOMContentLoaded", () => {
   setupTheme();
   setupModals();
-  setupInteractiveTabs();
   setupRadioCardClicks();
   setupListeners();
   setupCodeCopy();
@@ -64,31 +63,7 @@ function setupModals() {
   }
 }
 
-// 3. Interactive Compiler Sandbox Tabs (SWISH vs OneCompiler)
-function setupInteractiveTabs() {
-  const tabSwish = document.getElementById("tab-swish");
-  const tabOneCompiler = document.getElementById("tab-onecompiler");
-  const iframeSwish = document.getElementById("frame-swish");
-  const iframeOneCompiler = document.getElementById("frame-onecompiler");
-
-  if (tabSwish && tabOneCompiler && iframeSwish && iframeOneCompiler) {
-    tabSwish.addEventListener("click", () => {
-      tabSwish.classList.add("active");
-      tabOneCompiler.classList.remove("active");
-      iframeSwish.classList.remove("hidden");
-      iframeOneCompiler.classList.add("hidden");
-    });
-
-    tabOneCompiler.addEventListener("click", () => {
-      tabOneCompiler.classList.add("active");
-      tabSwish.classList.remove("active");
-      iframeOneCompiler.classList.remove("hidden");
-      iframeSwish.classList.add("hidden");
-    });
-  }
-}
-
-// 4. Copy Code Support for Base Knowledge Base
+// 3. Copy Code Support for Base Knowledge Base
 function setupCodeCopy() {
   const btnCopyProlog = document.getElementById("btn-copy-prolog");
   const codeBlock = document.getElementById("prolog-base-code");

@@ -101,14 +101,14 @@
         "determinacion_quien_es_padre_unario": "b7522c34e7fe208712e1a94b7bf5dcbdb4e129dd8401ec95e06bf3d02a1a4106"
       }
     },
-    "ej10_entornos_swish_vs_onecompiler": {
+    "ej10_entorno_swish_y_control": {
       "weight": 10,
-      "feedback": "SWISH es el entorno interactivo nativo oficial de SWI-Prolog que ofrece una consola '?-' con backtracking paso a paso (Next) y es ideal para el aprendizaje declarativo. OneCompiler ejecuta en modo batch/script por lo que requiere una directiva ':- initialization(main).' y comandos write/nl, siendo útil para scripts completos (Clase 7 Slide 5).",
+      "feedback": "SWISH es el entorno interactivo nativo oficial de SWI-Prolog que ofrece una consola '?-' con backtracking paso a paso (Next) y es ideal para el aprendizaje declarativo. En la terminal local de SWI-Prolog, una base de conocimiento se carga mediante consult('familia.pl'). o ['familia.pl']. (Clase 7 Slide 5).",
       "hashes": {
-        "entorno_swish_interactivo": "7544cf7ce1e4471d00d7c0fe2e460ead79921944c2ab07249560a9be8261d525",
-        "modo_ejecucion_onecompiler": "2b6501a33b584de14339248394025a992debba1c362c965b4aa378fdbc0d896f",
-        "resolucion_sld_profundidad": "db2eb4812bce3fabcc860be50da2b88cf4aaca6ac4a4b384165cdd8feda9a0db",
-        "peligro_recursion_izquierda": "aed911911868927a2618f9f0e7e4ee02fe9bf72fe6e949fa3f3db3b3122a2873"
+        "entorno_swish_interactivo": "1a1a48f9039ccc8d19eb722c6643365231d9d98c3def3e300aae6376f4291ec8",
+        "carga_archivo_swiprolog_local": "2712bd309802a7f3d1bb9e98492ef0cbaaa56e855f228979f2d7fc74f1a89c44",
+        "resolucion_sld_profundidad": "cd8b74fe5d5017e52955b8f5394711436a5363471769607debbd349aaa1233d4",
+        "peligro_recursion_izquierda": "4c07819496ee89ab64621807910643eaa37d8eda8a97814f38c2b3576bc8da96"
       }
     }
   }

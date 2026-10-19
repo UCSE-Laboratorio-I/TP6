@@ -56,7 +56,7 @@
         TP N° 6: Programación Lógica Aplicada en Prolog
       </h1>
       <p class="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
-        Declaración de hechos y predicados, consultas interactivas con variables, conjunciones con backtracking, reglas con cláusulas de Horn y resolución formal del árbol genealógico familiar en SWISH y OneCompiler.
+        Declaración de hechos y predicados, consultas interactivas con variables, conjunciones con backtracking, reglas con cláusulas de Horn y resolución formal del árbol genealógico familiar en el entorno oficial SWISH.
       </p>
     </header>
 
@@ -78,7 +78,7 @@
     </section>
 
     <!-- =========================================================================
-         PANEL INTERACTIVO: Entornos de Ejecución (SWISH vs OneCompiler) y Código Base
+         PANEL INTERACTIVO: Entorno de Ejecución (SWISH) y Código Base
     ========================================================================== -->
     <section id="compiler-sandbox" class="p-6 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl space-y-6">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
@@ -87,39 +87,118 @@
             <span>💻 Laboratorio en Línea</span>
           </div>
           <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-            Árbol Genealógico y Entornos de Ejecución Prolog
+            Árbol Genealógico y Entorno de Ejecución Prolog
           </h2>
           <p class="text-xs text-slate-400">
-            Copia el código base de <span class="font-mono text-sky-400">familia.pl</span> y pruébalo interactivamente en tu compilador preferido.
+            Copia el código base de <span class="font-mono text-sky-400">familia.pl</span> y pruébalo interactivamente en SWISH.
           </p>
         </div>
-        <div class="flex items-center gap-2 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
-          <button id="tab-swish" class="tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">
-            🌐 SWISH (Oficial / REPL)
-          </button>
-          <button id="tab-onecompiler" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">
-            ⚡ OneCompiler (Batch)
-          </button>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30">
+            🌐 SWISH (SWI-Prolog Oficial)
+          </span>
         </div>
       </div>
 
       <!-- Diagrama Visual del Árbol Genealógico de la Clase -->
-      <div class="p-4 bg-slate-950/80 rounded-xl border border-slate-800">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-sky-400 mb-2 flex items-center gap-1.5">
-          <span>🌳</span> Diagrama de la Familia (Clase 7 - Diapositiva 22)
-        </h3>
-        <div class="text-center font-mono text-xs md:text-sm text-slate-300 overflow-x-auto py-2 leading-relaxed">
-          <div class="text-amber-400 font-bold mb-1">victor &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; consuelo</div>
-          <div class="text-slate-500">└──┬────────────────────┘</div>
-          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;│ (padres de)</div>
-          <div class="text-slate-300">juan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; maria &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div class="text-slate-500">└──┬───────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;├── soltero &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;├── rosario &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;└── carlos ═════════════════════════ belen&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──┬────────────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── carlitos (hijo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div class="text-slate-500">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── elena &nbsp;&nbsp;&nbsp;(hija)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      <div class="p-4 bg-slate-950/80 rounded-xl border border-slate-800 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
+            <span>🌳</span> Diagrama de la Familia (Clase 7 - Diapositiva 22)
+          </h3>
+          <div class="flex items-center gap-3 text-[11px] text-slate-400 font-medium">
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-400 inline-block"></span> ♂ hombre</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-pink-400 inline-block"></span> ♀ mujer</span>
+          </div>
+        </div>
+
+        <div class="w-full overflow-x-auto py-2 flex justify-center">
+          <svg viewBox="0 0 700 310" class="w-full max-w-2xl h-auto select-none font-mono" style="min-width: 580px;">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- CONECTORES / LÍNEAS -->
+            <!-- Bracket Victor & Consuelo -->
+            <path d="M 370 48 L 370 70 L 560 70 L 560 48" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Línea hacia Belén -->
+            <path d="M 465 70 L 560 148" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+            <!-- Bracket Juan & Maria y flechas a Soltero, Rosario, Carlos -->
+            <path d="M 110 118 L 110 136 L 280 136 L 280 118" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Barra horizontal extendida para los 3 hijos -->
+            <path d="M 70 136 L 290 136" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+            <!-- Flecha a Soltero -->
+            <path d="M 70 136 L 70 156" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+            <!-- Flecha a Rosario -->
+            <path d="M 180 136 L 180 156" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+            <!-- Flecha a Carlos -->
+            <path d="M 290 136 L 290 156" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+            <!-- Bracket Carlos & Belén y flechas a Carlitos y Elena -->
+            <path d="M 290 190 L 290 216 L 560 216 L 560 190" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Flecha a Carlitos -->
+            <path d="M 370 216 L 370 246" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+            <!-- Flecha a Elena -->
+            <path d="M 480 216 L 480 246" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+            <!-- NODOS (PERSONAS) -->
+            <!-- Nivel 1: Victor & Consuelo -->
+            <g transform="translate(320, 16)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+              <text x="50" y="21" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">victor</text>
+            </g>
+
+            <g transform="translate(510, 16)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#f472b6" stroke-width="1.5" />
+              <text x="50" y="21" fill="#f472b6" font-size="13" font-weight="bold" text-anchor="middle">consuelo</text>
+            </g>
+
+            <!-- Nivel 2: Juan & Maria -->
+            <g transform="translate(60, 86)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+              <text x="50" y="21" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">juan</text>
+            </g>
+
+            <g transform="translate(230, 86)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#f472b6" stroke-width="1.5" />
+              <text x="50" y="21" fill="#f472b6" font-size="13" font-weight="bold" text-anchor="middle">maria</text>
+            </g>
+
+            <!-- Nivel 3: Soltero, Rosario, Carlos, Belen -->
+            <g transform="translate(20, 158)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+              <text x="50" y="21" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">soltero</text>
+            </g>
+
+            <g transform="translate(130, 158)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#f472b6" stroke-width="1.5" />
+              <text x="50" y="21" fill="#f472b6" font-size="13" font-weight="bold" text-anchor="middle">rosario</text>
+            </g>
+
+            <g transform="translate(240, 158)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+              <text x="50" y="21" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">carlos</text>
+            </g>
+
+            <g transform="translate(510, 158)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#f472b6" stroke-width="1.5" />
+              <text x="50" y="21" fill="#f472b6" font-size="13" font-weight="bold" text-anchor="middle">belen</text>
+            </g>
+
+            <!-- Nivel 4: Carlitos & Elena -->
+            <g transform="translate(320, 248)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+              <text x="50" y="21" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">carlitos</text>
+            </g>
+
+            <g transform="translate(430, 248)">
+              <rect width="100" height="32" rx="8" fill="#0f172a" stroke="#f472b6" stroke-width="1.5" />
+              <text x="50" y="21" fill="#f472b6" font-size="13" font-weight="bold" text-anchor="middle">elena</text>
+            </g>
+          </svg>
         </div>
       </div>
 
@@ -182,18 +261,6 @@ tia(X, Y) :- hermana(X, P), progenitor(P, Y).</code></pre>
         </div>
         <div class="rounded-xl overflow-hidden border border-slate-700 bg-white">
           <iframe src="https://swish.swi-prolog.org/" class="w-full h-[480px] border-0" title="SWISH Prolog Sandbox"></iframe>
-        </div>
-      </div>
-
-      <div id="frame-onecompiler" class="hidden space-y-3">
-        <div class="flex items-center justify-between text-xs text-slate-400">
-          <span>Compilador rápido OneCompiler: Requiere <code>:- initialization(main).</code> y llamar a <code>write/nl</code> en <code>main</code>.</span>
-          <a href="https://onecompiler.com/prolog" target="_blank" rel="noopener noreferrer" class="text-sky-400 underline hover:text-sky-300 font-medium flex items-center gap-1">
-            Abrir OneCompiler en pestaña nueva ↗
-          </a>
-        </div>
-        <div class="rounded-xl overflow-hidden border border-slate-700 bg-slate-950">
-          <iframe src="https://onecompiler.com/embed/prolog?theme=dark" class="w-full h-[480px] border-0" title="OneCompiler Prolog Sandbox"></iframe>
         </div>
       </div>
     </section>
@@ -892,21 +959,21 @@ tia(X, Y) :- hermana(X, P), progenitor(P, Y).</code></pre>
         </details>
       </section>
 
-      <!-- Ejercicio 10: Ejecución y Entornos de Desarrollo: SWISH vs. OneCompiler -->
+      <!-- Ejercicio 10: Ejecución y Entornos de Desarrollo: SWISH y SWI-Prolog -->
       <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 10: Ejecución y Entornos de Desarrollo: SWISH vs. OneCompiler</h3>
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 10: Ejecución y Entornos de Desarrollo: SWISH y SWI-Prolog</h3>
           <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
         </div>
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-          La interacción con Prolog difiere según el entorno utilizado. Compara las características de SWISH y OneCompiler y los principios de control de ejecución:
+          La interacción con Prolog se realiza a través de su consola declarativa interactiva. Compara las características de SWISH, SWI-Prolog local y los principios de control de ejecución:
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
             <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Entorno Oficial SWISH (SWI-Prolog):</span>
             <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué ventaja didáctica ofrece frente a otros compiladores?</p>
-            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="entorno_swish_interactivo" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+            <select data-ex="ej10_entorno_swish_y_control" data-key="entorno_swish_interactivo" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
               <option value="" disabled selected>-- Ventaja de SWISH --</option>
               <option value="solo_admite_lenguaje_c">Compila a lenguaje C de alto rendimiento</option>
               <option value="consola_nativa_con_backtracking_step_by_step">Consola interactiva '?-' nativa con botón 'Next' para inspeccionar el Backtracking paso a paso</option>
@@ -915,20 +982,20 @@ tia(X, Y) :- hermana(X, P), progenitor(P, Y).</code></pre>
           </div>
 
           <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
-            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Entorno OneCompiler (Modo Batch):</span>
-            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué requerimiento tiene OneCompiler para ejecutar código Prolog?</p>
-            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="modo_ejecucion_onecompiler" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
-              <option value="" disabled selected>-- Modo de OneCompiler --</option>
-              <option value="modo_batch_requiere_initialization_main">Ejecuta por lotes (batch) requiriendo ':- initialization(main).' y comandos write/nl para mostrar salida</option>
-              <option value="no_soporta_prolog">No cuenta con soporte para Prolog</option>
-              <option value="requiere_servidor_pago">Exige una suscripción de pago obligatoria</option>
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Carga en SWI-Prolog Local (Terminal / CLI):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se carga y consulta un archivo como <code>familia.pl</code> en la consola interactiva?</p>
+            <select data-ex="ej10_entorno_swish_y_control" data-key="carga_archivo_swiprolog_local" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Carga en SWI-Prolog --</option>
+              <option value="carga_con_consult_o_lista">Mediante la consulta ['familia.pl']. o el predicado consult('familia.pl').</option>
+              <option value="importar_modulo_python">Ejecutando import familia al estilo de Python</option>
+              <option value="compilacion_estatica_c">Compilando el archivo a binario ejecutable con GCC</option>
             </select>
           </div>
 
           <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
             <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Estrategia de Búsqueda SLD del Motor:</span>
             <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo recorre el árbol de resolución el motor de SWI-Prolog?</p>
-            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="resolucion_sld_profundidad" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+            <select data-ex="ej10_entorno_swish_y_control" data-key="resolucion_sld_profundidad" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
               <option value="" disabled selected>-- Búsqueda SLD --</option>
               <option value="bfs_en_anchura">Búsqueda en Anchura con cola FIFO</option>
               <option value="busqueda_dfs_con_vuelta_atras">Búsqueda en Profundidad Primero (DFS) de izquierda a derecha con Backtracking</option>
@@ -939,7 +1006,7 @@ tia(X, Y) :- hermana(X, P), progenitor(P, Y).</code></pre>
           <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
             <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Peligro de la Recursión por Izquierda:</span>
             <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué riesgo existe al definir <code>ancestro(X, Y) :- ancestro(X, Z), progenitor(Z, Y).</code>?</p>
-            <select data-ex="ej10_entornos_swish_vs_onecompiler" data-key="peligro_recursion_izquierda" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+            <select data-ex="ej10_entorno_swish_y_control" data-key="peligro_recursion_izquierda" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
               <option value="" disabled selected>-- Recursión izquierda --</option>
               <option value="optimiza_la_velocidad">Optimiza la velocidad al doble</option>
               <option value="bucle_infinito_por_llamada_recursiva_antes_de_base">Bucle infinito y desbordamiento de pila al llamarse a sí misma antes de evaluar el caso base</option>
@@ -1010,7 +1077,6 @@ tia(X, Y) :- hermana(X, P), progenitor(P, Y).</code></pre>
           <p class="font-semibold text-sky-600 dark:text-sky-400">💻 Entornos Recomendados:</p>
           <ul class="list-disc pl-5 space-y-0.5 text-xs">
             <li><a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="underline text-sky-400">SWISH (SWI-Prolog Online)</a>: Interactivo con prompt `?-` y botón Next.</li>
-            <li><a href="https://onecompiler.com/prolog" target="_blank" rel="noopener noreferrer" class="underline text-sky-400">OneCompiler Prolog</a>: Ejecución por script batch.</li>
             <li><a href="https://www.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="underline text-sky-400">SWI-Prolog Oficial</a>: Instalador para Windows/Linux/Mac.</li>
           </ul>
         </div>
